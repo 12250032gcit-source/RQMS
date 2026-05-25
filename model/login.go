@@ -3,7 +3,7 @@ package model
 import (
 	"database/sql"
 	"errors"
-	"rqms/controller/dataStore/postgres"
+	"rqms/dataStore/postgres"
 )
 
 type Login struct {

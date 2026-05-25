@@ -1,6 +1,6 @@
 package model
 
-import "rqms/controller/dataStore/postgres"
+import "rqms/dataStore/postgres"
 
 // Table represents a restaurant table
 type Table struct {

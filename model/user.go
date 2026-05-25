@@ -1,6 +1,8 @@
 package model
 
-import "rqms/controller/dataStore/postgres"
+import "rqms/dataStore/postgres"
+
+
 
 
 
