@@ -12,21 +12,32 @@ import (
 var Db *sql.DB
 
 func init() {
-	host := getEnv("DB_HOST", "dpg-d8a5h7ek1jcs73fl38q0-a.singapore-postgres.render.com")
-	port := getEnv("DB_PORT", "5432")
-	user := getEnv("DB_USER", "rqms_user")
-	password := getEnv("DB_PASSWORD", "eFxzVEyP1owIQXM7gODMI7JUgoMLTOvt")
-	dbname := getEnv("DB_NAME", "rqms")
+	// 1. Check if Render gave us a master connection string (Best Practice)
+	connStr := os.Getenv("DATABASE_URL")
 
-	// FIXED: Properly closed the string quotes and added sslmode=require
-	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
-		host, port, user, password, dbname,
-	)
+	if connStr == "" {
+		// 2. Fallback configuration if DATABASE_URL isn't set (For Local Development)
+		host := getEnv("DB_HOST", "dpg-d8a5h7ek1jcs73fl38q0-a.singapore-postgres.render.com")
+		port := getEnv("DB_PORT", "5432")
+		user := getEnv("DB_USER", "rqms_user")
+		password := getEnv("DB_PASSWORD", "eFxzVEyP1owIQXM7gODMI7JUgoMLTOvt")
+		dbname := getEnv("DB_NAME", "rqms")
+
+		// FIXED: Explicitly appended sslmode to prevent the 6th %s argument mismatch crash
+		connStr = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
+			host, port, user, password, dbname,
+		)
+	}
 
 	var err error
-	Db, err = sql.Open("postgres", dbInfo)
+	Db, err = sql.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
+	}
+
+	// Ping the database to guarantee the connection network is fully alive
+	if err = Db.Ping(); err != nil {
+		log.Fatalf("Database unreachable: %v", err)
 	} else {
 		log.Println("Database connected successfully")
 	}
