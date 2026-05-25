@@ -12,10 +12,10 @@ import (
 var Db *sql.DB
 
 func init() {
-	host := getEnv("DB_HOST", "db")
+	host := getEnv("DB_HOST", "dpg-d8a5h7ek1jcs73fl38q0-a.singapore-postgres.render.com")
 	port := getEnv("DB_PORT", "5432")
-	user := getEnv("DB_USER", "postgres")
-	password := getEnv("DB_PASSWORD", "postgres")
+	user := getEnv("DB_USER", "rqms_user")
+	password := getEnv("DB_PASSWORD", "eFxzVEyP1owIQXM7gODMI7JUgoMLTOvt")
 	dbname := getEnv("DB_NAME", "rqms")
 
 	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
