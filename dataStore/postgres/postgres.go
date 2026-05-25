@@ -18,7 +18,8 @@ func init() {
 	password := getEnv("DB_PASSWORD", "eFxzVEyP1owIQXM7gODMI7JUgoMLTOvt")
 	dbname := getEnv("DB_NAME", "rqms")
 
-	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	// FIXED: Properly closed the string quotes and added sslmode=require
+	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
 		host, port, user, password, dbname,
 	)
 
