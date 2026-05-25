@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RQMS – My Profile</title>
+  <link rel="stylesheet" href="css/base.css">
+  <style>
+    /* ── Profile page specific styles ── */
+    .profile-page {
+      max-width: 760px;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem 3rem;
+    }
+
+    /* Hero card */
+    .profile-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      border-radius: 18px;
+      padding: 2.5rem 2rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      color: var(--white);
+      box-shadow: 0 8px 32px rgba(26,54,93,.35);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='28'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      pointer-events: none;
+    }
+
+    .avatar-xl {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #63b3ed, #3182ce);
+      border: 4px solid rgba(255,255,255,.35);
+      color: var(--white);
+      font-weight: 900;
+      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: two;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: -1px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.3);
+      user-select: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-info {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-name {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.2rem;
+    }
+    .hero-email {
+      font-size: 0.9rem;
+      color: #90cdf4;
+      margin-bottom: 0.65rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 99px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #bee3f8;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Info cards row */
+    .profile-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1.25rem 1.25rem 1rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+    }
+    .info-card-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-500);
+      margin-bottom: 0.4rem;
+    }
+    .info-card-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gray-800);
+      word-break: break-all;
+    }
+    .info-card-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Booking section */
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Booking form panel */
+    .booking-panel {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+    }
+    @media (max-width: 520px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .profile-hero { flex-direction: column; text-align: center; }
+    }
+    .form-grid .full-col { grid-column: 1 / -1; }
+
+    /* Date/time validation feedback */
+    .time-hint {
+      font-size: 0.78rem;
+      color: var(--gray-500);
+      margin-top: 0.3rem;
+    }
+    .time-hint.warn {
+      color: #c05621;
+      font-weight: 600;
+    }
+    .time-hint.ok {
+      color: var(--green-dk);
+      font-weight: 600;
+    }
+
+    #msg { margin-top: 1rem; }
+
+    /* Bookings history */
+    .history-panel {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+    }
+    .booking-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--gray-200);
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .booking-row:last-child { border-bottom: none; }
+    .booking-time {
+      font-size: 0.87rem;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+    .booking-meta {
+      font-size: 0.78rem;
+      color: var(--gray-500);
+      margin-top: 0.15rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--gray-500);
+      padding: 2rem 1rem;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="home.html">🍽 RQMS</a>
+  <ul>
+    <li><a href="home.html">Queue</a></li>
+    <li id="navProfileChip"></li>
+  </ul>
+</nav>
+
+<div class="profile-page">
+
+  <!-- ── Hero ── -->
+  <div class="profile-hero">
+    <div class="avatar-xl" id="heroAvatar">?</div>
+    <div class="hero-info">
+      <div class="hero-name" id="heroName">Loading…</div>
+      <div class="hero-email" id="heroEmail"></div>
+      <div class="hero-badge"> Restaurant Queue Member</div>
+    </div>
+  </div>
+
+  <!-- ── Info cards ── -->
+  <div class="profile-cards">
+    <div class="info-card">
+      <div class="info-card-icon"></div>
+      <div class="info-card-label">Email</div>
+      <div class="info-card-value" id="cardEmail">—</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon"></div>
+      <div class="info-card-label">Phone</div>
+      <div class="info-card-value" id="cardPhone">—</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">👤</div>
+      <div class="info-card-label">Account</div>
+      <div class="info-card-value" id="cardRole">Guest</div>
+    </div>
+  </div>
+
+  <!-- ── Book a slot ── -->
+  <div class="booking-panel">
+    <div class="section-title">🗓 Book a Table</div>
+    <p class="field-locked-hint" style="margin-bottom:1rem;">
+      ✅ Your details are pre-filled. Choose a future date &amp; time to join the queue.
+    </p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>First Name *</label>
+        <div class="input-locked-wrap">
+          <input type="text" id="fname" placeholder="First name" autocomplete="given-name">
+          <span class="lock-icon">🔒</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Last Name *</label>
+        <div class="input-locked-wrap">
+          <input type="text" id="lname" placeholder="Last name" autocomplete="family-name">
+          <span class="lock-icon">🔒</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <div class="input-locked-wrap">
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+          <span class="lock-icon">🔒</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Phone *</label>
+        <input type="tel" id="phone" placeholder="+975 17xxxxxx" autocomplete="tel">
+      </div>
+      <div class="form-group full-col">
+        <label>Special Note <span class="editable-tag">Editable</span></label>
+        <input type="text" id="note" placeholder="e.g. window seat, allergy…">
+      </div>
+      <div class="form-group full-col">
+        <label>Preferred Date &amp; Time <span class="editable-tag">Editable</span></label>
+        <input type="datetime-local" id="time" oninput="validateTime()">
+        <div class="time-hint" id="timeHint">Select a future date and time.</div>
+      </div>
+    </div>
+
+    <div id="msg" class="msg-box" style="display:none;"></div>
+    <button class="btn btn-success btn-full mt-2" onclick="submitUser()">➕ Join Queue</button>
+  </div>
+
+  <!-- ── My bookings ── -->
+  <div class="history-panel">
+    <div class="section-title" style="justify-content:space-between;">
+      <span>📋 My Bookings</span>
+      <button class="btn btn-primary btn-sm" onclick="loadMyBookings()">🔄 Refresh</button>
+    </div>
+    <div id="myBookings"><div class="empty-state">Loading…</div></div>
+  </div>
+
+</div>
+
+<script src="js/user.js"></script>
+<script>
+/* ── Profile page init ── */
+window.onload = function () {
+  const stored = localStorage.getItem('rqms_user');
+  if (!stored) { window.location.href = 'index.html'; return; }
+
+  const firstName = localStorage.getItem('rqms_first_name') || '';
+  const lastName  = localStorage.getItem('rqms_last_name')  || '';
+  const email     = localStorage.getItem('rqms_email')      || stored;
+  const phone     = localStorage.getItem('rqms_phone')      || '';
+  const role      = localStorage.getItem('rqms_role')       || 'user';
+
+  // Build initials (up to 2 chars)
+  const initials = buildInitials(firstName, lastName, email);
+  const fullName = [firstName, lastName].filter(Boolean).join(' ') || email;
+
+  // Hero
+  document.getElementById('heroAvatar').textContent = initials;
+  document.getElementById('heroName').textContent   = fullName;
+  document.getElementById('heroEmail').textContent  = email;
+
+  // Info cards
+  document.getElementById('cardEmail').textContent = email;
+  document.getElementById('cardPhone').textContent = phone || '—';
+  document.getElementById('cardRole').textContent  = role === 'admin' ? '🛡 Admin' : '🙋 Guest';
+
+  // Nav chip
+  buildNavProfile(firstName, lastName, email);
+
+  // Pre-fill & lock booking form
+  prefillAndLock('fname', firstName);
+  prefillAndLock('lname', lastName);
+  prefillAndLock('email', email);
+  if (phone) prefillAndLock('phone', phone);
+
+  // Set minimum datetime to NOW
+  setMinDateTime();
+
+  loadMyBookings();
+};
+
+function buildInitials(first, last, email) {
+  if (first && last)  return (first[0] + last[0]).toUpperCase();
+  if (first)          return first.slice(0, 2).toUpperCase();
+  if (last)           return last.slice(0, 2).toUpperCase();
+  if (email)          return email[0].toUpperCase();
+  return '?';
+}
+
+/* ── Date/time enforcement ── */
+function setMinDateTime() {
+  const input = document.getElementById('time');
+  if (!input) return;
+  // Format: YYYY-MM-DDTHH:MM (local time, no seconds)
+  const now = new Date();
+  // add 1 minute buffer so "now" isn't instantly invalid
+  now.setMinutes(now.getMinutes() + 1);
+  const pad = n => String(n).padStart(2, '0');
+  const min = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  input.min = min;
+}
+
+function validateTime() {
+  const input  = document.getElementById('time');
+  const hint   = document.getElementById('timeHint');
+  const val    = input.value;
+  if (!val) {
+    hint.textContent = 'Select a future date and time.';
+    hint.className   = 'time-hint';
+    return false;
+  }
+  const chosen = new Date(val);
+  const now    = new Date();
+  if (chosen <= now) {
+    hint.textContent = '⚠️ Please choose a future date and time. Past bookings are not allowed.';
+    hint.className   = 'time-hint warn';
+    input.setCustomValidity('Past date/time not allowed.');
+    return false;
+  }
+  hint.textContent = '✅ Great — this time slot is available!';
+  hint.className   = 'time-hint ok';
+  input.setCustomValidity('');
+  return true;
+}
+
+/* ── Submit override with time guard ── */
+async function submitUser() {
+  // Re-validate time before submitting
+  const timeInput = document.getElementById('time');
+  const msg       = document.getElementById('msg');
+
+  if (!timeInput.value) {
+    showMsg(msg, '⏰ Please select a preferred date and time.', 'error');
+    return;
+  }
+  if (!validateTime()) {
+    showMsg(msg, '⚠️ You cannot book a past date or time. Please choose a future slot.', 'error');
+    return;
+  }
+
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const note  = document.getElementById('note').value.trim();
+  const time  = timeInput.value;
+
+  if (!fname || !lname || !email || !phone) {
+    showMsg(msg, 'Please fill in all required fields (name, email, phone).', 'error');
+    return;
+  }
+
+  localStorage.setItem('rqms_phone', phone);
+
+  try {
+    const res  = await fetch('/user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ first_name: fname, last_name: lname, email, phone, note, time, status: 'waiting' })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showMsg(msg, '✅ You have joined the queue! Staff will notify you.', 'success');
+      ['note','time'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('timeHint').textContent = 'Select a future date and time.';
+      document.getElementById('timeHint').className = 'time-hint';
+      loadMyBookings();
+    } else {
+      showMsg(msg, data.error || 'Failed to join queue.', 'error');
+    }
+  } catch (e) {
+    showMsg(msg, 'Server error. Please try again.', 'error');
+  }
+}
+
+/* ── My bookings ── */
+async function loadMyBookings() {
+  const container = document.getElementById('myBookings');
+  const myEmail   = localStorage.getItem('rqms_email') || '';
+  try {
+    const users = await fetch('/users').then(r => r.json()) || [];
+    const mine  = users.filter(u => u.email === myEmail);
+
+    if (!mine.length) {
+      container.innerHTML = '<div class="empty-state">You have no bookings yet. Book a table above! 🍽</div>';
+      return;
+    }
+
+    const statusIcon = { waiting: '⏳', seated: '🪑', done: '✅', cancelled: '❌' };
+    const statusClass = { waiting: 'status-waiting', seated: 'status-seated', done: 'status-done', cancelled: 'status-cancelled' };
+
+    container.innerHTML = mine.map(u => `
+      <div class="booking-row">
+        <div>
+          <div class="booking-time">${u.time ? formatDateTime(u.time) : 'No time set'}</div>
+          <div class="booking-meta">Note: ${u.note || '—'} · Table: ${u.table_no || '—'}</div>
+        </div>
+        <span class="status-badge ${statusClass[u.status] || 'status-waiting'}">
+          ${statusIcon[u.status] || '⏳'} ${u.status}
+        </span>
+      </div>
+    `).join('');
+  } catch (e) {
+    container.innerHTML = '<div class="empty-state">Could not load bookings.</div>';
+  }
+}
+
+function formatDateTime(str) {
+  if (!str) return '—';
+  try {
+    return new Date(str).toLocaleString(undefined, {
+      dateStyle: 'medium', timeStyle: 'short'
+    });
+  } catch { return str; }
+}
+
+function showMsg(el, text, type) {
+  el.style.display = 'block';
+  el.textContent   = text;
+  el.className     = 'msg-box ' + (type === 'error' ? 'msg-error' : 'msg-success');
+}
+</script>
+</body>
+</html>

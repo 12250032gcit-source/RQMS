@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RQMS – Staff Login</title>
+  <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+
+<nav>
+  <span class="brand">🍽 RQMS</span>
+  <ul>
+    <li><a href="index.html">Customer Login</a></li>
+    <li><a href="admin-register.html">Register</a></li>
+  </ul>
+</nav>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div style="text-align:center; margin-bottom:0.75rem; font-size:2.5rem;">👨‍💼</div>
+    <h1>Staff Login</h1>
+    <p class="auth-footer text-muted" style="margin-bottom:1.2rem;">Access your restaurant dashboard</p>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="staff@restaurant.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="pw" placeholder="••••••••" autocomplete="current-password">
+    </div>
+
+    <div id="msg" class="msg-box" style="display:none"></div>
+
+    <button class="btn btn-primary btn-full" onclick="staffLogin()">Sign In</button>
+
+    <p class="auth-footer mt-1">Not registered? <a href="admin-register.html">Register as staff →</a></p>
+    <p class="auth-footer" style="margin-top:0.4rem;">Customer? <a href="index.html">Customer Login</a></p>
+  </div>
+</div>
+
+<script src="js/admin-login.js"></script>
+</body>
+</html>

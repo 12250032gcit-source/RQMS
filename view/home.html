@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RQMS – My Booking</title>
+  <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+
+<nav>
+  <span class="brand">🍽 RQMS</span>
+  <ul>
+    <li id="navProfileChip"></li>
+  </ul>
+</nav>
+
+<div class="dashboard">
+  <h2>🪑 Join the Queue</h2>
+
+  <div class="panel">
+    <h3>Add Your Booking</h3>
+    <p class="field-locked-hint"> Your account details are pre-filled. Only <strong>Special Note</strong> and <strong>Preferred Time</strong> can be changed.</p>
+
+    <div class="inline-form">
+      <div class="form-group">
+        <label>First Name *</label>
+        <div class="input-locked-wrap">
+          <input type="text" id="fname" placeholder="Kinley" autocomplete="given-name">
+          <span class="lock-icon"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Last Name *</label>
+        <div class="input-locked-wrap">
+          <input type="text" id="lname" placeholder="Dorji" autocomplete="family-name">
+          <span class="lock-icon"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <div class="input-locked-wrap">
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+          <span class="lock-icon"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Phone *</label>
+        <input type="tel" id="phone" placeholder="+975 17xxxxxx" autocomplete="tel">
+      </div>
+      <div class="form-group">
+        <label>Special Note <span class="editable-tag">Editable</span></label>
+        <input type="text" id="note" placeholder="e.g. window seat, allergy…">
+      </div>
+      <div class="form-group">
+        <label>Preferred Time <span class="editable-tag">Editable</span></label>
+        <input type="datetime-local" id="time">
+      </div>
+    </div>
+    <div id="msg" class="msg-box" style="display:none; margin-top:0.75rem;"></div>
+    <button class="btn btn-success btn-full mt-2" onclick="submitUser()"> Join Queue</button>
+  </div>
+
+  <div class="panel">
+    <div class="filter-row">
+      <h3> Queue Status</h3>
+      <button class="btn btn-primary btn-sm" onclick="loadAll()"> Refresh</button>
+    </div>
+
+    <div class="queue-stats" id="statsBox"></div>
+
+    <div class="table-wrap">
+      <div id="tableContainer"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/user.js"></script>
+</body>
+</html>
